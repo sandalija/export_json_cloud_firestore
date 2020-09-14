@@ -31,6 +31,10 @@ i = 0
 for event in event_dict:
     event['name'] = "[imported] " + str(event['name'])
     key = event['id']
+    st = datetime.datetime.strptime(str(event['start_time']), "%d/%m/%Y %H:%M:%S %z")
+    event['start_time'] = st.isoformat()
+    et = datetime.datetime.strptime(str(event['end_time']), "%d/%m/%Y %H:%M:%S %z")
+    event['end_time'] = et.isoformat()
     element_ref = doc_ref.document(key)
     element_ref.set(event)
     element_ids.append(key)
