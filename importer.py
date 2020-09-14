@@ -29,8 +29,8 @@ print (start)
 
 i = 0
 for event in event_dict:
-    event['Name'] = "[imported] " + str(event['Name'])
-    key = event['Id']
+    event['name'] = "[imported] " + str(event['name'])
+    key = event['id']
     element_ref = doc_ref.document(key)
     element_ref.set(event)
     element_ids.append(key)
