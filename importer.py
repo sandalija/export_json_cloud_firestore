@@ -14,29 +14,28 @@ db = firestore.client()
 
 doc_ref = db.collection(u'events')
 paths = ['events']
-today = datetime.datetime.now()
+
 element_ids = []
 
 def get_random_alphanumeric_string(length):
     letters_and_digits = string.ascii_letters + string.digits
     return ''.join((random.choice(letters_and_digits) for i in range(length)))
 
-for path in paths:
-    event_files = os.listdir('data/' + path)
-    for file in event_files:
-        event = open('data/' + path + '/' + file,'r')
-        event_dict = json.load(event)
+event_dict = open('all.json','r')
+event_dict = json.load(event_dict)
 
-        start_offset = random.randint(0, 14)
-        event_dict['start_time'] = (today + datetime.timedelta(days = start_offset)).isoformat()
-        event_dict['end_time'] = (today + datetime.timedelta(days = random.randint(0, 14) + start_offset)).isoformat()
-        event_dict['name'] = "[imported] " + event_dict['name']
+start = datetime.datetime.now()
+print (start)
 
-        key = get_random_alphanumeric_string(20)
-        element_ref = db.collection(path).document(key)
-        element_ref.set(event_dict)
-        element_ids.append(key)
-        
-        print ("Added " + path +" (ID: " + key + ")")
+i = 0
+for event in event_dict:
+    event['Name'] = "[imported] " + str(event['Name'])
+    key = event['Id']
+    element_ref = doc_ref.document(key)
+    element_ref.set(event)
+    element_ids.append(key)
+    print ("Added ID: " + key)
+    i += 1
 
+print ("Uploaded " + str(i) + " elements in " + str(datetime.datetime.now()- start) + ".")
 
